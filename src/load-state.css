@@ -1,0 +1,17 @@
+#bak-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10000;
+  background: white;
+}
+
+#bak-overlay code {
+  font-family: monospace;
+}
+
+#bak-overlay form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  max-width: 500px;
+}

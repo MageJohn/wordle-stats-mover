@@ -12,6 +12,8 @@
     "build": "./scripts/build.js"
   },
   "devDependencies": {
+    "chalk": "^5.2.0",
+    "common-tags": "^1.8.2",
     "esbuild": "^0.17.11"
   },
   "dependencies": {
