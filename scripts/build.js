@@ -4,10 +4,10 @@ import process from "node:process";
 import path from "node:path";
 
 import * as esbuild from "esbuild";
-import chalk from "chalk";
 import { source } from "common-tags";
+import { outputFile } from "fs-extra/esm";
 
-const inspect = process.argv.includes("--inspect");
+const debug = process.argv.includes("--debug");
 
 /** @type {esbuild.Plugin} */
 const cssInjector = {
@@ -59,13 +59,15 @@ const cssInjector = {
   },
 };
 
+const outDir = debug ? "bookmarklets-debug/" : "bookmarklets/";
+
 const result = await esbuild.build({
   entryPoints: ["src/save-state.js", "src/load-state.jsx"],
   bundle: true,
-  minify: !inspect,
-  outdir: "bookmarklets/",
+  minify: !debug,
+  outdir: outDir,
   write: false,
-  format: inspect ? "esm" : "iife",
+  format: "iife",
   target: ["chrome108", "firefox102", "safari15", "edge109"],
   jsx: "transform",
   jsxFactory: "h",
@@ -74,16 +76,8 @@ const result = await esbuild.build({
   plugins: [cssInjector],
 });
 
-if (inspect) {
-  result.outputFiles.map((out) => {
-    console.log(chalk.green(`${out.path}:`));
-    console.log(out.text);
-    console.log("-------\n");
-  });
-}
-
 await Promise.all(
   result.outputFiles.map((out) => {
-    fs.writeFile(out.path, encodeURI(`javascript:${out.text}`));
+    outputFile(out.path, encodeURI(`javascript:${out.text}`));
   })
 );
