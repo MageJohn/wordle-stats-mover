@@ -5,22 +5,37 @@ import "./load-state.css";
 
 /** @type {HTMLButtonElement} */
 let submitButton;
-
 /** @type {HTMLInputElement} */
 let fileInput;
+/** @type {HTMLDivElement} */
+let errorContainer;
 
 document.body.appendChild(
   <div id="bak-overlay">
     <form
-      onSubmit={async (e) => {
-        e.preventDefault();
+      onSubmit={async (event) => {
+        event.preventDefault();
 
-        /** @type {File} */
         const file = fileInput.files[0];
 
         const data = await readFile(file);
 
-        const json = JSON.parse(data);
+        let json;
+        try {
+          json = JSON.parse(data);
+        } catch (error) {
+          if (error instanceof SyntaxError) {
+            errorContainer.innerHTML = (
+              <p>
+                There was an error parsing the file <code>{file.name}</code>:{" "}
+                <code class="error">{error.message}</code>
+              </p>
+            ).outerHTML;
+            return;
+          } else {
+            throw error;
+          }
+        }
         Object.entries(json).forEach(([key, value]) =>
           window.localStorage.setItem(key, value)
         );
@@ -32,9 +47,7 @@ document.body.appendChild(
       </label>
 
       <input
-        ref={(r) => {
-          fileInput = r;
-        }}
+        ref={(r) => (fileInput = r)}
         type="file"
         id="bak-inp"
         accept="application/json"
@@ -43,14 +56,11 @@ document.body.appendChild(
         }}
       />
 
-      <button
-        ref={(r) => {
-          submitButton = r;
-        }}
-        disabled
-      >
+      <button ref={(r) => (submitButton = r)} disabled>
         Submit
       </button>
+
+      <div id="err-container" ref={(r) => (errorContainer = r)} />
     </form>
   </div>
 );
