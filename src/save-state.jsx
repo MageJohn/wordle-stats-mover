@@ -1,5 +1,3 @@
-import { h } from "dom-chef";
-
 const data = Object.keys(window.localStorage)
   .filter((key) => key.includes("wordle"))
   .reduce((obj, key) => {
@@ -11,11 +9,13 @@ const dataURI = `data:application/javascript,${encodeURIComponent(
   JSON.stringify(data)
 )}`;
 
-const anchorElem = (
-  <a href={dataURI} download="wordle-backup.json" style={{ display: "none" }} />
-);
+const a = document.createElement("a");
+Object.assign(a, {
+  href: dataURI,
+  download: "wordle-backup.json",
+  style: { display: "none" },
+});
 
-document.body.appendChild(anchorElem);
-anchorElem.click();
-
-document.body.remove(anchorElem);
+document.body.appendChild(a);
+a.click();
+document.body.remove(a);
