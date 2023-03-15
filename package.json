@@ -1,0 +1,17 @@
+{
+  "name": "wordle-stats-mover",
+  "version": "1.0.0",
+  "private": true,
+  "homepage": "https://github.com/MageJohn/wordle-stats-mover#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MageJohn/wordle-stats-mover.git"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "./scripts/build.js"
+  },
+  "devDependencies": {
+    "esbuild": "^0.17.11"
+  }
+}
