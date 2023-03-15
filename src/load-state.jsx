@@ -1,22 +1,13 @@
-import { h } from "dom-chef";
+import { createElement as h } from "@turtlemay/jsx-dom";
 import { readFile } from "./utils";
 
 import "./load-state.css";
 
 /** @type {HTMLButtonElement} */
-const submitButton = <button disabled>Submit</button>;
+let submitButton;
 
 /** @type {HTMLInputElement} */
-const fileInput = (
-  <input
-    type="file"
-    id="bak-inp"
-    accept="application/json"
-    onChange={(e) => {
-      submitButton.disabled = e.target.files.length === 0;
-    }}
-  />
-);
+let fileInput;
 
 document.body.appendChild(
   <div id="bak-overlay">
@@ -36,13 +27,30 @@ document.body.appendChild(
         window.location.reload();
       }}
     >
-      <label for={fileInput.id}>
+      <label for="bak-inp">
         Open your <code>wordle-backup.json</code> file:
       </label>
 
-      {fileInput}
+      <input
+        ref={(r) => {
+          fileInput = r;
+        }}
+        type="file"
+        id="bak-inp"
+        accept="application/json"
+        onChange={(e) => {
+          submitButton.disabled = e.target.files.length === 0;
+        }}
+      />
 
-      {submitButton}
+      <button
+        ref={(r) => {
+          submitButton = r;
+        }}
+        disabled
+      >
+        Submit
+      </button>
     </form>
   </div>
 );

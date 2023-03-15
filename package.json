@@ -17,6 +17,6 @@
     "fs-extra": "^11.1.0"
   },
   "dependencies": {
-    "dom-chef": "^5.1.0"
+    "@turtlemay/jsx-dom": "^1.1.3"
   }
 }
