@@ -13,5 +13,8 @@
   },
   "devDependencies": {
     "esbuild": "^0.17.11"
+  },
+  "dependencies": {
+    "dom-chef": "^5.1.0"
   }
 }
