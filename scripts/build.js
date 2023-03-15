@@ -78,6 +78,6 @@ const result = await esbuild.build({
 
 await Promise.all(
   result.outputFiles.map((out) => {
-    outputFile(out.path, encodeURI(`javascript:${out.text}`));
+    outputFile(out.path, `javascript:${encodeURIComponent(out.text)}`);
   })
 );
