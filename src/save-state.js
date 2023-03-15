@@ -1,29 +1,22 @@
-var a = window.open("about:blank").document;
-a.write(
+const page = window.open("about:blank").document;
+page.write(
   '<!DOCTYPE html><html><head><title>Wordle Save</title><meta name="viewport" content="width=device-width" /></head><body></body></html>'
 );
-a.close();
+page.close();
 
-var b = a.body.appendChild(a.createElement("pre"));
-b.style.overflow = "auto";
-b.style.whiteSpace = "pre-wrap";
-b.style.wordBreak = "break-word";
+const outputContainer = page.body.appendChild(page.createElement("pre"));
+outputContainer.style = {
+  ...outputContainer.style,
+  overflow: "auto",
+  whiteSpace: "pre-wrap",
+  wordBreak: "break-word",
+};
 
-var stateKey = window.localStorage.hasOwnProperty("nyt-wordle-state")
-  ? "nyt-wordle-state"
-  : "gameState";
+const data = Object.keys(window.localStorage)
+  .filter((key) => key.includes("wordle"))
+  .reduce((obj, key) => {
+    obj[key] = window.localStorage.getItem(key);
+    return obj;
+  }, /** @type{Record<string, string>} */ ({}));
 
-var statsKey = window.localStorage.hasOwnProperty("nyt-wordle-statistics")
-  ? "nyt-wordle-statistics"
-  : "statistics";
-
-b.appendChild(
-  a.createTextNode(
-    btoa(
-      JSON.stringify({
-        gameState: JSON.parse(window.localStorage.getItem(stateKey)),
-        statistics: JSON.parse(window.localStorage.getItem(statsKey)),
-      })
-    )
-  )
-);
+outputContainer.appendChild(page.createTextNode(btoa(JSON.stringify(data))));
