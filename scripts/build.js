@@ -60,7 +60,7 @@ const cssInjector = {
 };
 
 const result = await esbuild.build({
-  entryPoints: ["src/save-state.jsx", "src/load-state.jsx"],
+  entryPoints: ["src/save-state.js", "src/load-state.jsx"],
   bundle: true,
   minify: !inspect,
   outdir: "bookmarklets/",
