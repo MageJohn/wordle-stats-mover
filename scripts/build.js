@@ -70,8 +70,6 @@ const result = await esbuild.build({
   format: "iife",
   target: ["chrome108", "firefox102", "safari15", "edge109"],
   jsx: "transform",
-  jsxFactory: "h",
-  jsxFragment: "DocumentFragment",
   logLevel: "info",
   plugins: [cssInjector],
 });

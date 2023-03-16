@@ -1,4 +1,4 @@
-import { createElement as h } from "@turtlemay/jsx-dom";
+import * as React from "@turtlemay/jsx-dom";
 import { readFile } from "./utils";
 
 import "./load-state.css";
