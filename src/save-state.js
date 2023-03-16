@@ -3,7 +3,7 @@ const data = Object.keys(window.localStorage)
   .reduce((obj, key) => {
     obj[key] = window.localStorage.getItem(key);
     return obj;
-  }, /** @type{Record<string, string>} */ ({}));
+  }, /** @type{Record<string, string?>} */ ({}));
 
 const dataURI = `data:application/javascript,${encodeURIComponent(
   JSON.stringify(data)
@@ -18,4 +18,4 @@ Object.assign(a, {
 
 document.body.appendChild(a);
 a.click();
-document.body.remove(a);
+a.remove();
