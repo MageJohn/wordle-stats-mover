@@ -12,8 +12,12 @@
     "build": "./scripts/build.js"
   },
   "devDependencies": {
+    "@types/common-tags": "^1.8.1",
+    "@types/fs-extra": "^11.0.1",
+    "chalk": "^5.2.0",
     "common-tags": "^1.8.2",
     "esbuild": "^0.17.11",
+    "filesize": "^10.0.6",
     "fs-extra": "^11.1.0"
   },
   "dependencies": {

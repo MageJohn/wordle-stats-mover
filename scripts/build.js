@@ -2,10 +2,13 @@
 import fs from "node:fs/promises";
 import process from "node:process";
 import path from "node:path";
+import { performance } from "node:perf_hooks";
 
 import * as esbuild from "esbuild";
 import { source } from "common-tags";
 import { outputFile } from "fs-extra/esm";
+import { filesize } from "filesize";
+import chalk from "chalk";
 
 const debug = process.argv.includes("--debug");
 
@@ -59,23 +62,63 @@ const cssInjector = {
   },
 };
 
+/** @type {esbuild.Plugin} */
+const bookmarkletOutput = {
+  name: "bookmarklet-output",
+  setup(build) {
+    const encoder = new TextEncoder();
+
+    const options = build.initialOptions;
+
+    if (options.format && options.format !== "iife") {
+      console.warn(
+        'Overriding output format to "iife" for bookmarklet support.'
+      );
+    }
+    build.initialOptions.format = "iife";
+
+    const write = options.write || true;
+    options.write = false;
+
+    build.onEnd(async ({ errors, outputFiles }) => {
+      if (!errors.length && outputFiles?.length && write) {
+        await Promise.all(
+          outputFiles.map(async (out) => {
+            out.contents = encoder.encode(encodeURI(`javascript:${out.text}`));
+            if (write) {
+              await outputFile(out.path, out.text);
+            }
+          })
+        );
+      }
+    });
+  },
+};
+
 const outDir = debug ? "bookmarklets-debug/" : "bookmarklets/";
+
+const start = performance.now();
 
 const result = await esbuild.build({
   entryPoints: ["src/save-state.js", "src/load-state.jsx"],
   bundle: true,
   minify: !debug,
   outdir: outDir,
-  write: false,
-  format: "iife",
   target: ["chrome108", "firefox102", "safari15", "edge109"],
   jsx: "transform",
-  logLevel: "info",
-  plugins: [cssInjector],
+  plugins: [cssInjector, bookmarkletOutput],
 });
 
-await Promise.all(
-  result.outputFiles.map((out) => {
-    outputFile(out.path, `javascript:${encodeURIComponent(out.text)}`);
-  })
-);
+const elapsedTime = performance.now() - start;
+
+if (result.outputFiles?.length) {
+  for (const file of result.outputFiles) {
+    const relPath = path.relative(process.cwd(), file.path);
+    const size = filesize(file.contents.byteLength);
+
+    console.log(`  ${chalk.bold(relPath)} ${chalk.cyan(size)}`);
+  }
+  console.log();
+}
+
+console.log(chalk.green(`⚡ Done in ${Math.round(elapsedTime)} ms`));
