@@ -105,7 +105,8 @@ const result = await esbuild.build({
   minify: !debug,
   outdir: outDir,
   target: ["chrome108", "firefox102", "safari15", "edge109"],
-  jsx: "transform",
+  jsx: "automatic",
+  jsxImportSource: "./jsx",
   plugins: [cssInjector, bookmarkletOutput],
 });
 

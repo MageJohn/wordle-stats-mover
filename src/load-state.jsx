@@ -1,4 +1,3 @@
-import * as React from "@turtlemay/jsx-dom";
 import { readFile } from "./utils";
 
 import "./load-state.css";
@@ -13,7 +12,7 @@ let errorContainer;
 document.body.appendChild(
   <div id="bak-overlay">
     <form
-      onSubmit={async (event) => {
+      onsubmit={async (event) => {
         event.preventDefault();
 
         const file = fileInput.files[0];
@@ -51,7 +50,7 @@ document.body.appendChild(
         type="file"
         id="bak-inp"
         accept="application/json"
-        onChange={(e) => {
+        onchange={(e) => {
           submitButton.disabled = e.target.files.length === 0;
         }}
       />
