@@ -1,24 +1,24 @@
-#bak-overlay {
+#ld-st {
   position: absolute;
   inset: 0;
   z-index: 10000;
-  background: white;
+  background: #fff;
   padding: 16px;
   line-height: normal;
 }
 
-#bak-overlay code {
-  background-color: #eee;
+#ld-st code {
+  background: #eee;
   border-radius: 3px;
-  font-family: monospace;
+  font: monospace;
   padding: 0 3px;
 }
 
-#bak-overlay .error {
+#ld-st .error {
   color: red;
 }
 
-#bak-overlay form {
+#ld-st form {
   display: flex;
   flex-direction: column;
   row-gap: 8px;
