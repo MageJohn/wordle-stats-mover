@@ -48,15 +48,26 @@ const cssInjector = {
     build.onLoad(
       { filter: /\.css$/, namespace: "css-injector-stub" },
       async (args) => {
-        return {
-          loader: "js",
-          contents: source`
+        if (build.initialOptions.jsx === "automatic") {
+          return {
+            resolveDir: path.dirname(args.path),
+            loader: "jsx",
+            contents: source`
+              import css from ${JSON.stringify(args.path)};
+              document.head.appendChild(<style>{css}</style>);
+            `,
+          };
+        } else {
+          return {
+            loader: "js",
+            contents: source`
             import css from ${JSON.stringify(args.path)};
             const style = document.createElement("style");
             style.appendChild(document.createTextNode(css));
             document.head.appendChild(style);
           `,
-        };
+          };
+        }
       }
     );
   },
@@ -107,7 +118,7 @@ const result = await esbuild.build({
   target: ["chrome108", "firefox102", "safari15", "edge109"],
   jsx: "automatic",
   jsxImportSource: "./jsx",
-  plugins: [cssInjector, bookmarkletOutput],
+  plugins: [cssInjector, debug ? null : bookmarkletOutput].filter((v) => v),
 });
 
 const elapsedTime = performance.now() - start;
