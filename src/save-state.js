@@ -12,12 +12,12 @@ const dataURI = `data:application/javascript,${encodeURIComponent(
 const date = new Date();
 const localDate = new Date(date.valueOf() - date.getTimezoneOffset() * 60e3);
 const localDateString = localDate.toISOString().split("T")[0];
-const name = `wordle-backup-${localDateString}.json`;
+const fileName = `wordle-backup-${localDateString}.json`;
 
 const a = document.createElement("a");
 Object.assign(a, {
   href: dataURI,
-  download: name,
+  download: fileName,
   style: { display: "none" },
 });
 
