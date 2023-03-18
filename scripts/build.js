@@ -95,7 +95,12 @@ const bookmarkletOutput = {
       if (!errors.length && outputFiles?.length && write) {
         await Promise.all(
           outputFiles.map(async (out) => {
-            out.contents = encoder.encode(encodeURI(`javascript:${out.text}`));
+            /** @type {string} */
+            let text = out.text.trim();
+            if (text.at(-1) === ';') {
+              text = text.slice(0, -1);
+            }
+            out.contents = encoder.encode(encodeURI(`javascript:${text}`));
             if (write) {
               await outputFile(out.path, out.text);
             }
