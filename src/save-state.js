@@ -5,7 +5,7 @@ const data = Object.keys(window.localStorage)
     return obj;
   }, /** @type{Record<string, string?>} */ ({}));
 
-const dataURI = `data:application/javascript,${encodeURIComponent(
+const dataURI = `data:application/json,${encodeURIComponent(
   JSON.stringify(data)
 )}`;
 
