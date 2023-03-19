@@ -1,43 +1,27 @@
 export const jsx = (tag, { children, ref, ...props }) => {
-  let el;
-  if (typeof tag === "string") {
-    el = document.createElement(tag);
+  if (tag === jsx) tag = document.createDocumentFragment();
+  if (typeof tag === "function") return tag({ children, ref, ...props });
+  else tag = document.createElement(tag);
 
-    for (const key in props) {
-      if (key in el) {
-        el[key] = props[key];
-      } else {
-        if ((props[key] ?? false) === false) {
-          el.removeAttribute(key);
-        } else {
-          el.setAttribute(key, props[key]);
-        }
-      }
+  for (const key in props) {
+    if (key in tag) tag[key] = props[key];
+    else {
+      // An attribute whose value is exactly false is not added to the dom.
+      // undefined, null, 0, and "" (the empty string) values are still added.
+      props[key] !== false && tag.setAttribute(key, props[key]);
     }
-
-    if (children instanceof Array) {
-      el.append(...children);
-    } else if (children) {
-      el.append(children);
-    }
-
-    ref?.(el);
   }
 
-  if (typeof tag === "function") {
-    el = tag({ children, ...props });
+  if (Array.isArray(children)) tag.append(...children);
+  else {
+    // If children are not undefined or null, append them. Children that are
+    // false, 0, or "" (the empty string) are still added.
+    children != undefined && tag.append(children);
   }
 
-  return el;
+  ref?.(tag);
+  return tag;
 };
 
 export const jsxs = jsx;
-
-export const Fragment = ({ children }) => {
-  const el = document.createDocumentFragment();
-  if (children instanceof Array) {
-    el.append(...children);
-  } else if (!children) {
-    el.append(children);
-  }
-};
+export const Fragment = jsx;
