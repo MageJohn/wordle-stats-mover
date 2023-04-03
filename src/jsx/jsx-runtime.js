@@ -1,23 +1,21 @@
-export const jsx = (tag, { children, ref, ...props }) => {
-  if (tag === jsx) tag = document.createDocumentFragment();
-  if (typeof tag === "function") return tag({ children, ref, ...props });
+export const jsx = (tag, props) => {
+  if (tag == jsx) tag = document.createDocumentFragment();
+  else if (typeof tag == "function") return tag(props);
   else tag = document.createElement(tag);
 
-  for (const key in props) {
-    if (key in tag) tag[key] = props[key];
-    else {
-      // An attribute whose value is exactly false is not added to the dom.
-      // undefined, null, 0, and "" (the empty string) values are still added.
-      props[key] !== false && tag.setAttribute(key, props[key]);
+  const { children, ref, ...otherProps } = props;
+
+  for (const key in otherProps) {
+    if (key in tag) tag[key] = otherProps[key];
+    else if ((otherProps[key] ?? false) !== false) {
+      // An attribute whose value is undefined, null, or false is not added to
+      // the dom. 0, and "" (the empty string) values are still added.
+      tag.setAttribute(key, otherProps[key]);
     }
   }
 
-  if (Array.isArray(children)) tag.append(...children);
-  else {
-    // If children are not undefined or null, append them. Children that are
-    // false, 0, or "" (the empty string) are still added.
-    children != undefined && tag.append(children);
-  }
+  // Any children which are undefined or null are excluded
+  tag.append(...[].concat(children ?? []).filter((v) => v != undefined));
 
   ref?.(tag);
   return tag;
