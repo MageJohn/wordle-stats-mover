@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "./scripts/build.js"
+    "build": "./scripts/build.js",
+    "update-readme": "./scripts/update-readme.js"
   },
   "devDependencies": {
     "@types/common-tags": "^1.8.1",
