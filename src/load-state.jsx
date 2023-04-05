@@ -1,6 +1,5 @@
 import { readFile } from "./utils";
-
-import "./load-state.css";
+import * as classes from "./load-state.css";
 
 /** @type {HTMLButtonElement} */
 let submitButton;
@@ -10,7 +9,7 @@ let fileInput;
 let errorContainer;
 
 document.body.append(
-  <div /* short for load-state */ id="ld-st">
+  <div class={classes.overlay}>
     <form
       onsubmit={async (event) => {
         event.preventDefault();
@@ -26,7 +25,7 @@ document.body.append(
           errorContainer.innerHTML = (
             <p>
               There was an error parsing the file <code>{file.name}</code>:{" "}
-              <code class="error">{error.message}</code>
+              <code class={classes.error}>{error.message}</code>
             </p>
           ).outerHTML;
           return;
