@@ -1,4 +1,4 @@
-#ld-st {
+.overlay {
   position: absolute;
   inset: 0;
   z-index: 10000;
@@ -7,18 +7,18 @@
   line-height: normal;
 }
 
-#ld-st code {
+.overlay code {
   background: #eee;
   border-radius: 3px;
-  font: monospace;
+  font-family: monospace;
   padding: 0 3px;
 }
 
-#ld-st .error {
+.error {
   color: red;
 }
 
-#ld-st form {
+.overlay form {
   display: flex;
   flex-direction: column;
   row-gap: 8px;
