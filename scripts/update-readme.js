@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 import fs from "node:fs/promises";
-import { codeBlock } from "common-tags";
 
 const fileMatch = (name) =>
   RegExp(`(?<=<!-- ${name} -->\n).*?(?=\n<!-- END -->)`, "s");
