@@ -1,7 +1,5 @@
 {
-  "cSpell.words": [
-    "Wordle"
-  ],
+  "cSpell.words": ["Wordle"],
   "search.exclude": {
     "**/.yarn": true,
     "**/.pnp.*": true
